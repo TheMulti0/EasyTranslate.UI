@@ -8,4 +8,5 @@ namespace EasyTranslate.UI.Views
         {
             InitializeComponent();
         }
+    }
 }

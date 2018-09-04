@@ -4,9 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasyTranslate.UI"
+        xmlns:xezui="clr-namespace:XeZrunner.UI.Controls;assembly=XeZrunner.UI"
+        xmlns:buttons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <buttons:Button Content="hi"></buttons:Button>
+        <xezui:CheckBox />
     </Grid>
 </Window>
