@@ -18,7 +18,9 @@
         <HierarchicalDataTemplate x:Key="SuggestionsTemplate" 
                                   DataType="viewModels:Suggestion" 
                                   ItemsSource="{Binding Items}">
-            <TextBlock Text="{Binding Title}" />
+            <Grid>
+                <TextBlock Text="{Binding Title}" />
+                <Button>Hi</Button></Grid>
         </HierarchicalDataTemplate>
     </Window.Resources>
 
@@ -50,7 +52,7 @@
                 </Border>
                 
             </StackPanel>
-            <TreeView ItemTemplate="{StaticResource SuggestionsTemplate}" />
+<TreeView ItemTemplate="{StaticResource SuggestionsTemplate}" />
         </StackPanel>
         <!--<StackPanel Orientation="Horizontal">
             <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" Width="100" TextChanged="TextBoxBase_OnTextChanged" />
@@ -62,3 +64,4 @@
     </Border>
 
 </Window>
+
