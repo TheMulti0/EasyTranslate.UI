@@ -8,8 +8,6 @@ namespace EasyTranslate.UI.ViewModels
 {
     internal class MainWindowViewModel : PropertyChangedHelper
     {
-        private readonly PropertyChangedHelper _helper;
-
         public string Text { get; set; }
 
         public IEnumerable<TranslateLanguages> Languages { get; set; }
@@ -46,8 +44,6 @@ namespace EasyTranslate.UI.ViewModels
 
         public MainWindowViewModel()
         {
-            _helper = new PropertyChangedHelper();
-
             Languages = Enum.GetValues(typeof(TranslateLanguages))
                             .Cast<TranslateLanguages>();
             ProgressVisibility = Visibility.Collapsed;

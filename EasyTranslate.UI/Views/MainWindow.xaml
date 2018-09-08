@@ -7,7 +7,6 @@
         xmlns:xezControls="clr-namespace:XeZrunner.UI.Controls;assembly=XeZrunner.UI"
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
-        xmlns:windowComponents="clr-namespace:XeZrunner.UI.Controls.Window_components;assembly=XeZrunner.UI"
         mc:Ignorable="d"
         Title="EasyTranslate.UI" Height="450" Width="800">
 
