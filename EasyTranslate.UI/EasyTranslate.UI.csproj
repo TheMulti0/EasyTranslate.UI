@@ -90,6 +90,8 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Suggestion.cs" />
+    <Compile Include="ViewModels\SuggestionExample.cs" />
+    <Compile Include="ViewModels\SuggestionExamplesToString.cs" />
     <Compile Include="ViewModels\SuggestionType.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,12 +1,17 @@
-﻿namespace EasyTranslate.UI.ViewModels
+﻿using System.Collections.Generic;
+
+namespace EasyTranslate.UI.ViewModels
 {
     internal class SuggestionType
     {
-        public string Title { get; set; }
+        public List<Suggestion> Suggestions { get; set; }
 
-        public SuggestionType(string title)
+        public string Type { get; set; }
+
+        public SuggestionType(string type)
         {
-            Title = title;
+            Suggestions = new List<Suggestion>();
+            Type = type;
         }
     }
 }

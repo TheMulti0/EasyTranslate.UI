@@ -12,7 +12,7 @@ namespace EasyTranslate.UI.ViewModels
     internal class MainWindowViewModel : INotifyPropertyChanged
     {
         private string _result;
-        private IEnumerable<Suggestion> _suggestions;
+        private IEnumerable<SuggestionType> _suggestions;
         private bool _isLoading;
         private Visibility _progressVisibility;
 
@@ -32,7 +32,7 @@ namespace EasyTranslate.UI.ViewModels
             }
         }
 
-        public IEnumerable<Suggestion> Suggestions
+        public IEnumerable<SuggestionType> Suggestions
         {
             get => _suggestions;
             set

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using EasyTranslate.Exceptions;
 using EasyTranslate.TranslationData;
@@ -42,7 +43,7 @@ namespace EasyTranslate.UI.Views
                 }
                 catch
                 {
-                    // ignored
+                    _vm.Suggestions = new List<SuggestionType>();
                 }
             }
             catch (TranslationFailedException)
@@ -51,28 +52,37 @@ namespace EasyTranslate.UI.Views
             _vm.IsLoading = false;
         }
 
-        private static IEnumerable<Suggestion> GetSuggestions(TranslationSequence result)
+        private static IEnumerable<SuggestionType> GetSuggestions(TranslationSequence result)
         {
-            List<Suggestion> types = new List<Suggestion>();
-            foreach (ExtraTranslation extra in result.Suggestions)
+            void GetList(ExtraTranslation extra, List<SuggestionType> suggestionTypes)
             {
                 string type = extra.Type.ToString();
-                Suggestion belongType = types.Any(item => item.Title == type)
-                    ? types.Find(item => item.Title == type)
-                    : new Suggestion(type);
+                bool IsTypeEqual(SuggestionType item) => item.Type == type;
 
-                Suggestion suggestion = null;
-                foreach (string extraWord in extra.Words)
+                SuggestionType belongType = suggestionTypes.Any(IsTypeEqual) 
+                        ? suggestionTypes.Find(IsTypeEqual) 
+                        : new SuggestionType(type);
+
+                var suggestion = new Suggestion(extra.Name);
+                Parallel.ForEach(extra.Words, extraWord => suggestion.Examples.Add(new SuggestionExample(extraWord)));
+
+                if (suggestion.Examples.Count > 0)
                 {
-                    suggestion = new Suggestion(extra.Name);
-                    suggestion.Items.Add(new Suggestion(extraWord));
+                    belongType.Suggestions.Add(suggestion);
                 }
-                if (suggestion != null)
+                int index = suggestionTypes.IndexOf(suggestionTypes.Find(IsTypeEqual));
+                if (index > -1)
                 {
-                    belongType.Items.Add(suggestion);
+                    suggestionTypes[index] = belongType;
                 }
-                types.Add(belongType);
+                else
+                {
+                    suggestionTypes.Add(belongType);
+                }
             }
+
+            List<SuggestionType> types = new List<SuggestionType>();
+            Parallel.ForEach(result.Suggestions, extra => GetList(extra, types));
             return types;
         }
     }

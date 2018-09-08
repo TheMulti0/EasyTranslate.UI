@@ -1,21 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace EasyTranslate.UI.ViewModels
 {
     internal class Suggestion
     {
-        public ObservableCollection<Suggestion> Items { get; set; }
+        public List<SuggestionExample> Examples { get; set; }
 
         public string Title { get; set; }
 
-        public Suggestion()
-        {
-
-        }
-
         public Suggestion(string title)
         {
-            Items = new ObservableCollection<Suggestion>();
+            Examples = new List<SuggestionExample>();
             Title = title;
         }
     }

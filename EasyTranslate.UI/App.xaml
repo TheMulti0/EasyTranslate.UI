@@ -5,17 +5,17 @@
     <Application.Resources>
         <ResourceDictionary>
             
-            <!--<Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}" />
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}" />
 
             <ResourceDictionary.MergedDictionaries>
 
-                --><!--  Material Controls   --><!--
+                  <!--Material Controls-->   
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/materialdesigncolor.amber.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
 
-            </ResourceDictionary.MergedDictionaries>-->
+            </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
     </Application.Resources>

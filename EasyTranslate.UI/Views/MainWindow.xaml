@@ -15,13 +15,7 @@
     </Window.DataContext>
     
     <Window.Resources>
-        <HierarchicalDataTemplate x:Key="SuggestionsTemplate" 
-                                  DataType="viewModels:Suggestion" 
-                                  ItemsSource="{Binding Items}">
-            <Grid>
-                <TextBlock Text="{Binding Title}" />
-                <Button>Hi</Button></Grid>
-        </HierarchicalDataTemplate>
+        <viewModels:SuggestionExamplesToString x:Key="ExamplesToString" />
     </Window.Resources>
 
     <Border Padding="15">
@@ -43,16 +37,45 @@
                     <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBoxBase_OnTextChanged" />
                 </Border>
                 
-                <Border Background="Aquamarine" Width="200" Padding="20">
+                <Border Background="LightSkyBlue" Width="200" Padding="20">
                     <Grid>
-                        <TextBlock Text="{Binding Result}" Width="200" />
+
+                        <TextBlock Text="{Binding Result}" Width="200" Foreground="WhiteSmoke" />
                         <xezControls:ArcProgress IsActive="{Binding IsLoading}" Visibility="{Binding ProgressVisibility}" />
-                        
+
                     </Grid>
                 </Border>
                 
+                
             </StackPanel>
-<TreeView ItemTemplate="{StaticResource SuggestionsTemplate}" />
+
+            <ItemsControl ItemsSource="{Binding Suggestions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:SuggestionType}">
+                        <StackPanel Orientation="Horizontal">
+
+                            <TextBlock Text="{Binding Type}"
+                                       FontStyle="Italic" FontWeight="Light" />
+
+                            <StackPanel>
+                                <ItemsControl ItemsSource="{Binding Suggestions}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type viewModels:Suggestion}">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Title}" />
+
+                                                <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
         </StackPanel>
         <!--<StackPanel Orientation="Horizontal">
             <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" Width="100" TextChanged="TextBoxBase_OnTextChanged" />
