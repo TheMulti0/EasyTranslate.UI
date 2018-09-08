@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using EasyTranslate.TranslationData;
-using EasyTranslate.UI.Annotations;
 
 namespace EasyTranslate.UI.ViewModels
 {
-    internal class MainWindowViewModel : INotifyPropertyChanged
+    internal class MainWindowViewModel : PropertyChangedHelper
     {
-        private string _result;
-        private IEnumerable<SuggestionType> _suggestions;
-        private bool _isLoading;
-        private Visibility _progressVisibility;
+        private readonly PropertyChangedHelper _helper;
 
         public string Text { get; set; }
 
@@ -24,60 +18,39 @@ namespace EasyTranslate.UI.ViewModels
 
         public string Result
         {
-            get => _result;
-            set
-            {
-                _result = value;
-                OnPropertyChanged();
-            }
+            get => GetProperty<string>();
+            set => SetProperty<string>(value);
         }
 
         public IEnumerable<SuggestionType> Suggestions
         {
-            get => _suggestions;
-            set
-            {
-                _suggestions = value;
-                OnPropertyChanged();
-            }
+            get => GetProperty<IEnumerable<SuggestionType>>();
+            set => SetProperty<IEnumerable<SuggestionType>>(value);
         }
 
         public bool IsLoading
         {
-            get => _isLoading;
+            get => GetProperty<bool>();
             set
             {
-                _isLoading = value;
-                OnPropertyChanged();
-                ProgressVisibility = value 
-                    ? Visibility.Visible 
-                    : Visibility.Collapsed;
+                SetProperty<bool>(value);
+                ProgressVisibility = value ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
         public Visibility ProgressVisibility
         {
-            get => _progressVisibility;
-            set
-            {
-                _progressVisibility = value;
-                OnPropertyChanged();
-            }
+            get => GetProperty<Visibility>();
+            set => SetProperty<Visibility>(value);
         }
 
         public MainWindowViewModel()
         {
+            _helper = new PropertyChangedHelper();
+
             Languages = Enum.GetValues(typeof(TranslateLanguages))
                             .Cast<TranslateLanguages>();
             ProgressVisibility = Visibility.Collapsed;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -8,11 +8,9 @@ namespace EasyTranslate.UI.ViewModels
     internal class SuggestionExamplesToString : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) 
-            => string.Join(", ", (List<SuggestionExample>) value);
+            => string.Join(", ", value as List<SuggestionExample>);
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) 
+            => throw new NotImplementedException();
     }
 }

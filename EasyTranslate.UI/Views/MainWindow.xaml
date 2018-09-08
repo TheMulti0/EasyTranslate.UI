@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:xezControls="clr-namespace:XeZrunner.UI.Controls;assembly=XeZrunner.UI"
-        xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI"
+        xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
+        xmlns:windowComponents="clr-namespace:XeZrunner.UI.Controls.Window_components;assembly=XeZrunner.UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="EasyTranslate.UI" Height="450" Width="800">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
@@ -18,73 +19,68 @@
         <viewModels:SuggestionExamplesToString x:Key="ExamplesToString" />
     </Window.Resources>
 
-    <Border Padding="15">
-        <StackPanel>
+    <StackPanel>
 
-            <ComboBox ItemsSource="{Binding Languages}"
+        <Border Padding="15">
+            <StackPanel>
+
+                <ComboBox ItemsSource="{Binding Languages}"
                       SelectedItem="{Binding Language}"
                       Width="100" />
 
-            <StackPanel Orientation="Horizontal" Margin="1"
+                <StackPanel Orientation="Horizontal" Margin="1"
                         Background="White"
                         Width="400" Height="125">
 
-                <StackPanel.Effect>
-                    <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />
-                </StackPanel.Effect>
+                    <StackPanel.Effect>
+                        <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />
+                    </StackPanel.Effect>
 
-                <Border Width="200" Padding="20">
-                    <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBoxBase_OnTextChanged" />
-                </Border>
-                
-                <Border Background="LightSkyBlue" Width="200" Padding="20">
-                    <Grid>
+                    <Border Width="200" Padding="20">
+                        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBoxBase_OnTextChanged" />
+                    </Border>
 
-                        <TextBlock Text="{Binding Result}" Width="200" Foreground="WhiteSmoke" />
-                        <xezControls:ArcProgress IsActive="{Binding IsLoading}" Visibility="{Binding ProgressVisibility}" />
+                    <Border Background="{DynamicResource PrimaryHueLightBrush}" Width="200" Padding="20">
+                        <Grid>
 
-                    </Grid>
-                </Border>
-                
-                
-            </StackPanel>
+                            <TextBlock Text="{Binding Result}" Foreground="WhiteSmoke" />
+                            <xezControls:ArcProgress IsActive="{Binding IsLoading}" Visibility="{Binding ProgressVisibility}" />
 
-            <ItemsControl ItemsSource="{Binding Suggestions}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type viewModels:SuggestionType}">
-                        <StackPanel Orientation="Horizontal">
+                        </Grid>
+                    </Border>
 
-                            <TextBlock Text="{Binding Type}"
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding Suggestions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type viewModels:SuggestionType}">
+                            <StackPanel Orientation="Horizontal">
+
+                                <TextBlock Text="{Binding Type}"
                                        FontStyle="Italic" FontWeight="Light" />
 
-                            <StackPanel>
-                                <ItemsControl ItemsSource="{Binding Suggestions}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type viewModels:Suggestion}">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Title}" />
+                                <StackPanel>
+                                    <ItemsControl ItemsSource="{Binding Suggestions}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type viewModels:Suggestion}">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Title}" />
 
-                                                <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                                    <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+
                             </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-        </StackPanel>
-        <!--<StackPanel Orientation="Horizontal">
-            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" Width="100" TextChanged="TextBoxBase_OnTextChanged" />
-            <ComboBox ItemsSource="{Binding Languages}"
-                      SelectedItem="{Binding Language}"
-                      Width="100" />
-            <TextBlock Text="{Binding Result}" Width="100" />
-        </StackPanel>-->
-    </Border>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 
 </Window>
 
