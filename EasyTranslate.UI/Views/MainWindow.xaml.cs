@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using System.Windows.Controls;
 using EasyTranslate.Exceptions;
 using EasyTranslate.TranslationData;
 using EasyTranslate.Translators;
+using EasyTranslate.UI.Models;
 using EasyTranslate.UI.ViewModels;
 
 namespace EasyTranslate.UI.Views
@@ -15,39 +15,71 @@ namespace EasyTranslate.UI.Views
     public partial class MainWindow
     {
         private readonly MainWindowViewModel _vm;
+        private readonly JsonParser _json;
         private CancellationTokenSource _cts;
 
         public MainWindow()
         {
             InitializeComponent();
+
             _vm = DataContext as MainWindowViewModel;
+            _json = new JsonParser();
+
+            _json.DeserializeSequencesAsync();
+            _vm.Language = _json.Settings.LastLanguage;
         }
 
-        private async void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void OnClosing(object sender, EventArgs e)
         {
-            _cts?.Cancel();
-            _cts = new CancellationTokenSource();
+            _json.Settings.LastLanguage = _vm.Language;
+            _json.SerializeSequences();
+        }
 
-            ITranslator translator = new GoogleTranslator();
-            var word = new TranslationSequence(_vm.Text);
-            
+        private async void OnTextChanged(object sender, TextChangedEventArgs e) 
+            => await Translate();
+
+        private async void OnLanguageChanged(object sender, SelectionChangedEventArgs e) 
+            => await Translate();
+
+        private async Task Translate()
+        {
+            if (_vm == null)
+            {
+                return;
+            }
+
             try
             {
+                _cts?.Cancel();
+                _cts = new CancellationTokenSource();
+
+                ITranslator translator = new GoogleTranslator();
+                var sequence = new TranslationSequence(_vm.Text);
                 _vm.IsLoading = true;
-                TranslationSequence result = await translator.TranslateAsync(word, _vm.Language, _cts.Token);
-                _vm.Result = result.Sequence;
-                IEnumerable<SuggestionType> suggestions = new List<SuggestionType>();
-                await Task.Run(() =>
+
+                SavedTranslationSequence saved = await ReadCache(sequence);
+                TranslationSequence result;
+                if (saved == null)
                 {
-                    try
+                    result = await translator.TranslateAsync(sequence, _vm.Language, _cts.Token);
+                    saved = new SavedTranslationSequence
                     {
-                        suggestions = GetSuggestions(result);
-                    }
-                    catch
-                    {
-                    }
-                });
-                _vm.Suggestions = suggestions;
+                        SourceTranslationSequence = sequence,
+                        SourceLanguage = _vm.Language,
+                        TranslationSequence = result
+                    }; 
+                }
+                else
+                {
+                    result = saved.TranslationSequence;
+                }
+
+                _vm.Result = result.Sequence;
+                _vm.Suggestions = await GetSuggestions(result);
+
+                saved.TimeSaved = DateTime.Now;
+
+                _json.Cache.Add(saved);
             }
             catch (TranslationFailedException)
             {
@@ -55,7 +87,46 @@ namespace EasyTranslate.UI.Views
             _vm.IsLoading = false;
         }
 
-        private IEnumerable<SuggestionType> GetSuggestions(TranslationSequence result)
+        private Task<SavedTranslationSequence> ReadCache(TranslationSequence sequence)
+        {
+            SavedTranslationSequence Enumerate()
+            {
+                SavedTranslationSequence savedSequence = null;
+
+                Parallel.ForEach(_json.Cache, (saved, state) =>
+                {
+                    if (saved.SourceTranslationSequence.Sequence != sequence.Sequence ||
+                        saved.SourceLanguage != _vm.Language)
+                    {
+                        return;
+                    }
+                    savedSequence = saved;
+                    state.Stop();
+                });
+                return savedSequence;
+            }
+
+            return Task.Run((Func<SavedTranslationSequence>) Enumerate);
+        }
+
+        private async Task<IEnumerable<SuggestionType>> GetSuggestions(TranslationSequence result)
+        {
+            IEnumerable<SuggestionType> suggestions = new List<SuggestionType>();
+            await Task.Run(() =>
+            {
+                try
+                {
+                    suggestions = ExtractSuggestions(result);
+                }
+                catch
+                {
+                    // ignored
+                }
+            });
+            return suggestions;
+        }
+
+        private IEnumerable<SuggestionType> ExtractSuggestions(TranslationSequence result)
         {
             List<SuggestionType> types = new List<SuggestionType>();
             foreach (ExtraTranslation extra in result.Suggestions)

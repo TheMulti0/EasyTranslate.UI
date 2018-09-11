@@ -87,6 +87,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\AppSettings.cs" />
+    <Compile Include="Models\JsonParser.cs" />
+    <Compile Include="Models\SavedTranslationSequence.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangedHelper.cs" />

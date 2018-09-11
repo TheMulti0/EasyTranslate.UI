@@ -8,7 +8,8 @@
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
-        Title="EasyTranslate.UI" Height="450" Width="800">
+        Title="EasyTranslate.UI" Height="450" Width="800"
+        Closing="OnClosing">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
@@ -24,19 +25,20 @@
             <StackPanel>
 
                 <ComboBox ItemsSource="{Binding Languages}"
-                      SelectedItem="{Binding Language}"
-                      Width="100" />
+                          SelectedItem="{Binding Language}"
+                          SelectionChanged="OnLanguageChanged"
+                          Width="100" />
 
-                <StackPanel Orientation="Horizontal" Margin="1"
-                        Background="White"
-                        Width="400" Height="125">
+                <DockPanel Margin="1"
+                           Background="White"
+                           Width="400" Height="125">
 
-                    <StackPanel.Effect>
+                    <DockPanel.Effect>
                         <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />
-                    </StackPanel.Effect>
+                    </DockPanel.Effect>
 
                     <Border Width="200" Padding="20">
-                        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBoxBase_OnTextChanged" />
+                        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="OnTextChanged" />
                     </Border>
 
                     <Border Background="{DynamicResource PrimaryHueLightBrush}" Width="200" Padding="20">
@@ -48,7 +50,7 @@
                         </Grid>
                     </Border>
 
-                </StackPanel>
+                </DockPanel>
 
                 <ItemsControl ItemsSource="{Binding Suggestions}">
                     <ItemsControl.ItemTemplate>

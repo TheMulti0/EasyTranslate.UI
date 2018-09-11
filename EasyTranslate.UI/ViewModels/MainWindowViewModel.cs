@@ -12,7 +12,11 @@ namespace EasyTranslate.UI.ViewModels
 
         public IEnumerable<TranslateLanguages> Languages { get; set; }
 
-        public TranslateLanguages Language { get; set; }
+        public TranslateLanguages Language
+        {
+            get => GetProperty<TranslateLanguages>();
+            set => SetProperty<TranslateLanguages>(value);
+        }
 
         public string Result
         {
