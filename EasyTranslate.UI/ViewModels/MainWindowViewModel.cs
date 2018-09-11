@@ -8,9 +8,13 @@ namespace EasyTranslate.UI.ViewModels
 {
     internal class MainWindowViewModel : PropertyChangedHelper
     {
-        public string Text { get; set; }
-
         public IEnumerable<TranslateLanguages> Languages { get; set; }
+
+        public string Text
+        {
+            get => GetProperty<string>();
+            set => SetProperty<string>(value);
+        }
 
         public TranslateLanguages Language
         {

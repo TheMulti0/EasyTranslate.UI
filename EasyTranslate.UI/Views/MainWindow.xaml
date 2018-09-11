@@ -9,7 +9,7 @@
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
         Title="EasyTranslate.UI" Height="450" Width="800"
-        Closing="OnClosing">
+        Loaded="OnLoaded" Closing="OnClosing">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
@@ -22,7 +22,7 @@
     <StackPanel>
 
         <Border Padding="15">
-            <StackPanel>
+            <StackPanel x:Name="Panel">
 
                 <ComboBox ItemsSource="{Binding Languages}"
                           SelectedItem="{Binding Language}"
@@ -52,32 +52,34 @@
 
                 </DockPanel>
 
-                <ItemsControl ItemsSource="{Binding Suggestions}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type viewModels:SuggestionType}">
-                            <StackPanel Orientation="Horizontal">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              MaxWidth="{Binding Width, ElementName=Panel}" MaxHeight="{Binding Height, ElementName=Window}">
+
+                    <TreeView ItemsSource="{Binding Suggestions}">
+                        <TreeView.Resources>
+
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:SuggestionType}"
+                                                      ItemsSource="{Binding Suggestions}">
 
                                 <TextBlock Text="{Binding Type}"
-                                       FontStyle="Italic" FontWeight="Light" />
+                                           FontStyle="Italic" FontWeight="Light" />
 
+                            </HierarchicalDataTemplate>
+
+                            <HierarchicalDataTemplate DataType="{x:Type viewModels:Suggestion}">
                                 <StackPanel>
-                                    <ItemsControl ItemsSource="{Binding Suggestions}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type viewModels:Suggestion}">
-                                                <StackPanel>
-                                                    <TextBlock Text="{Binding Title}" />
 
-                                                    <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                    <TextBlock Text="{Binding Title}" />
+
+                                    <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
+
                                 </StackPanel>
+                            </HierarchicalDataTemplate>
 
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                        </TreeView.Resources>
+                    </TreeView>
+
+                </ScrollViewer>
 
             </StackPanel>
         </Border>

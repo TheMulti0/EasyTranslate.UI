@@ -7,9 +7,9 @@ namespace EasyTranslate.UI.Models
     {
         public TranslationSequence SourceTranslationSequence { get; set; }
 
-        public TranslateLanguages SourceLanguage { get; set; }
-
         public TranslationSequence TranslationSequence { get; set; }
+
+        public TranslateLanguages Language { get; set; }
 
         public DateTime TimeSaved { get; set; }
     }

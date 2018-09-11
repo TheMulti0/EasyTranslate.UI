@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using EasyTranslate.Exceptions;
 using EasyTranslate.TranslationData;
@@ -26,12 +27,25 @@ namespace EasyTranslate.UI.Views
             _json = new JsonParser();
 
             _json.DeserializeSequencesAsync();
-            _vm.Language = _json.Settings.LastLanguage;
+        }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            SavedTranslationSequence last = _json.Cache.LastOrDefault();
+
+            _vm.Text = last?.SourceTranslationSequence.Sequence;
+
+            TranslationSequence lastTranslationSequence = last?.TranslationSequence;
+
+            _vm.Result = lastTranslationSequence?.Sequence;
+            _vm.Suggestions = await GetSuggestions(lastTranslationSequence);
+
+            _vm.Language = last?.Language ?? TranslateLanguages.Afrikaans;
         }
 
         private void OnClosing(object sender, EventArgs e)
         {
-            _json.Settings.LastLanguage = _vm.Language;
+            _json.Cache.LastOrDefault().Language = _vm.Language;
             _json.SerializeSequences();
         }
 
@@ -65,8 +79,8 @@ namespace EasyTranslate.UI.Views
                     saved = new SavedTranslationSequence
                     {
                         SourceTranslationSequence = sequence,
-                        SourceLanguage = _vm.Language,
-                        TranslationSequence = result
+                        TranslationSequence = result,
+                        Language = _vm.Language
                     }; 
                 }
                 else
@@ -96,7 +110,7 @@ namespace EasyTranslate.UI.Views
                 Parallel.ForEach(_json.Cache, (saved, state) =>
                 {
                     if (saved.SourceTranslationSequence.Sequence != sequence.Sequence ||
-                        saved.SourceLanguage != _vm.Language)
+                        saved.Language != _vm.Language)
                     {
                         return;
                     }
