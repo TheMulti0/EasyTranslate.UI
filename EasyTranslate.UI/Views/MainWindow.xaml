@@ -1,4 +1,5 @@
 ﻿<Window x:Class="EasyTranslate.UI.Views.MainWindow"
+        x:Name="Window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,13 +9,17 @@
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
-        Title="EasyTranslate.UI" Height="400" Width="600" WindowStartupLocation="CenterScreen"
-        MinWidth="300" MinHeight="300"
+        Title="EasyTranslate.UI" WindowStartupLocation="CenterScreen"
+        Width="600" Height="400"
         Loaded="OnLoaded" Closing="OnClosing">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
+
+    <Window.Topmost>
+        <Binding Path="IsTopmost" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" />
+    </Window.Topmost>
 
     <Window.Resources>
         <viewModels:SuggestionExamplesToString x:Key="ExamplesToString" />
@@ -29,11 +34,20 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ComboBox Grid.Row="0"
-                      ItemsSource="{Binding Languages}"
-                      SelectedItem="{Binding Language}"
-                      SelectionChanged="OnLanguageChanged"
-                      Width="100" />
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+                <ToggleButton Width="48" Height="48" IsChecked="{Binding IsTopmost}" Style="{DynamicResource MaterialDesignFlatPrimaryToggleButton}">
+                    <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Path Data="M22,17V7H6V17H22M22,5A2,2 0 0,1 24,7V17C24,18.11 23.1,19 22,19H16V21H18V23H10V21H12V19H6C4.89,19 4,18.11 4,17V7A2,2 0 0,1 6,5H22M2,3V15H0V3A2,2 0 0,1 2,1H20V3H2Z" Fill="Black" />
+                    </Canvas>
+                </ToggleButton>
+
+                <ComboBox ItemsSource="{Binding Languages}"
+                          SelectedItem="{Binding Language}"
+                          SelectionChanged="OnLanguageChanged"
+                          Width="100" Margin="11, 0, 0, 0" />
+
+            </StackPanel>
 
             <Grid Grid.Row="1">
 

@@ -8,6 +8,9 @@ namespace EasyTranslate.UI.ViewModels
 {
     internal class MainWindowViewModel : PropertyChangedHelper
     {
+        private readonly (int width, int height) _defaultWindowSize;
+        private readonly (int width, int height) _minimalWindowSize;
+
         public IEnumerable<TranslateLanguages> Languages { get; set; }
 
         public string Text
@@ -50,11 +53,39 @@ namespace EasyTranslate.UI.ViewModels
             set => SetProperty<Visibility>(value);
         }
 
+        public bool IsTopmost
+        {
+            get => GetProperty<bool>();
+            set
+            {
+                SetProperty<bool>(value);
+
+                if (Application.Current.MainWindow == null)
+                {
+                    return;
+                }
+                if (value)
+                {
+                    Application.Current.MainWindow.Width = _minimalWindowSize.width;
+                    Application.Current.MainWindow.Height = _minimalWindowSize.height;
+                }
+                else
+                {
+                    Application.Current.MainWindow.Width = _defaultWindowSize.width;
+                    Application.Current.MainWindow.Height = _defaultWindowSize.height;
+                }
+            }
+        }
+
         public MainWindowViewModel()
         {
+            _defaultWindowSize = (600, 400);
+            _minimalWindowSize = (300, 300);
+
             Languages = Enum.GetValues(typeof(TranslateLanguages))
                             .Cast<TranslateLanguages>();
             ProgressVisibility = Visibility.Collapsed;
+            IsTopmost = false;
         }
     }
 }
