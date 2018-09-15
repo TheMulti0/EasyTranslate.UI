@@ -10,6 +10,7 @@
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
         Title="EasyTranslate.UI" WindowStartupLocation="CenterScreen"
+        MinWidth="300" MinHeight="300"
         Width="600" Height="400"
         Loaded="OnLoaded" Closing="OnClosing">
 
@@ -31,7 +32,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition MinHeight="75" Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition MinHeight="200" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -49,7 +50,7 @@
 
             </StackPanel>
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Margin="5">
 
                 <Grid.Effect>
                     <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />

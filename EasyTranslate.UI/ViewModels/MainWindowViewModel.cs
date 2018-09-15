@@ -60,20 +60,26 @@ namespace EasyTranslate.UI.ViewModels
             {
                 SetProperty<bool>(value);
 
-                if (Application.Current.MainWindow == null)
+                if (Application.Current?.MainWindow == null)
                 {
                     return;
                 }
-                if (value)
-                {
-                    Application.Current.MainWindow.Width = _minimalWindowSize.width;
-                    Application.Current.MainWindow.Height = _minimalWindowSize.height;
-                }
-                else
-                {
-                    Application.Current.MainWindow.Width = _defaultWindowSize.width;
-                    Application.Current.MainWindow.Height = _defaultWindowSize.height;
-                }
+
+                ChangeWindowSize(value);
+            }
+        }
+
+        private void ChangeWindowSize(bool value)
+        {
+            if (value)
+            {
+                Application.Current.MainWindow.Width = _minimalWindowSize.width;
+                Application.Current.MainWindow.Height = _minimalWindowSize.height;
+            }
+            else
+            {
+                Application.Current.MainWindow.Width = _defaultWindowSize.width;
+                Application.Current.MainWindow.Height = _defaultWindowSize.height;
             }
         }
 
