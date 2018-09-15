@@ -8,13 +8,14 @@
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
-        Title="EasyTranslate.UI" MinHeight="300" MinWidth="300"
+        Title="EasyTranslate.UI" 
+        MinWidth="300" MinHeight="300"
         Loaded="OnLoaded" Closing="OnClosing">
 
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
-    
+
     <Window.Resources>
         <viewModels:SuggestionExamplesToString x:Key="ExamplesToString" />
     </Window.Resources>
@@ -24,8 +25,8 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition MinHeight="75" Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <ComboBox Grid.Row="0"
