@@ -8,7 +8,7 @@
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
-        Title="EasyTranslate.UI" Height="450" Width="800"
+        Title="EasyTranslate.UI" MinHeight="300" MinWidth="300"
         Loaded="OnLoaded" Closing="OnClosing">
 
     <Window.DataContext>
@@ -19,71 +19,80 @@
         <viewModels:SuggestionExamplesToString x:Key="ExamplesToString" />
     </Window.Resources>
 
-    <StackPanel>
+    <Border Padding="15">
+        <Grid>
 
-        <Border Padding="15">
-            <StackPanel x:Name="Panel">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-                <ComboBox ItemsSource="{Binding Languages}"
-                          SelectedItem="{Binding Language}"
-                          SelectionChanged="OnLanguageChanged"
-                          Width="100" />
+            <ComboBox Grid.Row="0"
+                      ItemsSource="{Binding Languages}"
+                      SelectedItem="{Binding Language}"
+                      SelectionChanged="OnLanguageChanged"
+                      Width="100" />
 
-                <DockPanel Margin="1"
-                           Background="White"
-                           Width="400" Height="125">
+            <Grid Grid.Row="1">
 
-                    <DockPanel.Effect>
-                        <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />
-                    </DockPanel.Effect>
+                <Grid.Effect>
+                    <DropShadowEffect Opacity="0.13" BlurRadius="12" ShadowDepth="6" Direction="-45" />
+                </Grid.Effect>
 
-                    <Border Width="200" Padding="20">
-                        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" TextChanged="OnTextChanged" />
-                    </Border>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-                    <Border Background="{DynamicResource PrimaryHueLightBrush}" Width="200" Padding="20">
-                        <Grid>
+                <Border Grid.Column="0" 
+                        Padding="20">
+                    <TextBox TextWrapping="Wrap"
+                             Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                             TextChanged="OnTextChanged" />
+                </Border>
 
-                            <TextBlock Text="{Binding Result}" Foreground="WhiteSmoke" />
-                            <xezControls:ArcProgress IsActive="{Binding IsLoading}" Visibility="{Binding ProgressVisibility}" />
+                <Border Grid.Column="1"
+                        Padding="20"
+                        Background="{DynamicResource PrimaryHueLightBrush}">
+                    <Grid>
 
-                        </Grid>
-                    </Border>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="{Binding Result}"
+                                   Foreground="WhiteSmoke" />
+                        <xezControls:ArcProgress IsActive="{Binding IsLoading}" 
+                                                 Visibility="{Binding ProgressVisibility}" />
 
-                </DockPanel>
+                    </Grid>
+                </Border>
 
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                              MaxWidth="{Binding Width, ElementName=Panel}" MaxHeight="{Binding Height, ElementName=Window}">
+            </Grid>
+            <TreeView Grid.Row="2"
+                      ItemsSource="{Binding Suggestions}">
+                <TreeView.Resources>
 
-                    <TreeView ItemsSource="{Binding Suggestions}">
-                        <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type viewModels:SuggestionType}"
+                                              ItemsSource="{Binding Suggestions}">
 
-                            <HierarchicalDataTemplate DataType="{x:Type viewModels:SuggestionType}"
-                                                      ItemsSource="{Binding Suggestions}">
+                        <TextBlock Text="{Binding Type}"
+                                   FontStyle="Italic" FontWeight="Light" />
 
-                                <TextBlock Text="{Binding Type}"
-                                           FontStyle="Italic" FontWeight="Light" />
+                    </HierarchicalDataTemplate>
 
-                            </HierarchicalDataTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type viewModels:Suggestion}">
+                        <StackPanel>
 
-                            <HierarchicalDataTemplate DataType="{x:Type viewModels:Suggestion}">
-                                <StackPanel>
+                            <TextBlock Text="{Binding Title}" />
 
-                                    <TextBlock Text="{Binding Title}" />
+                            <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
 
-                                    <Label Content="{Binding Examples, Converter={StaticResource ExamplesToString}}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
 
-                                </StackPanel>
-                            </HierarchicalDataTemplate>
-
-                        </TreeView.Resources>
-                    </TreeView>
-
-                </ScrollViewer>
-
-            </StackPanel>
-        </Border>
-    </StackPanel>
+                </TreeView.Resources>
+            </TreeView>
+        </Grid>
+    </Border>
 
 </Window>
 

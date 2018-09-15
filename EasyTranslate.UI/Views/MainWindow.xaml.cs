@@ -142,10 +142,10 @@ namespace EasyTranslate.UI.Views
 
         private IEnumerable<SuggestionType> ExtractSuggestions(TranslationSequence result)
         {
-            List<SuggestionType> types = new List<SuggestionType>();
+            var types = new List<SuggestionType>();
             foreach (ExtraTranslation extra in result.Suggestions)
             {
-                string type = extra.Type.ToString();
+                var type = extra.Type.ToString();
                 bool IsTypeEqual(SuggestionType item) => item.Type == type;
 
                 SuggestionType belongType = types.Any(IsTypeEqual)
