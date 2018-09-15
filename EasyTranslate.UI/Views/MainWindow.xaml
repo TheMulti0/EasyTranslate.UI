@@ -8,7 +8,7 @@
         xmlns:xezButtons="clr-namespace:XeZrunner.UI.Controls.Buttons;assembly=XeZrunner.UI" 
         xmlns:viewModels="clr-namespace:EasyTranslate.UI.ViewModels"
         mc:Ignorable="d"
-        Title="EasyTranslate.UI" 
+        Title="EasyTranslate.UI" Height="400" Width="600" WindowStartupLocation="CenterScreen"
         MinWidth="300" MinHeight="300"
         Loaded="OnLoaded" Closing="OnClosing">
 

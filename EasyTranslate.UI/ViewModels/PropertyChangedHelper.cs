@@ -19,6 +19,10 @@ namespace EasyTranslate.UI.ViewModels
         public void SetProperty<T>(object value, [CallerMemberName] string propertyName = "")
         {
             EnsureElement<T>(propertyName);
+            if (_values[propertyName] == value)
+            {
+                return;
+            }
             _values[propertyName] = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

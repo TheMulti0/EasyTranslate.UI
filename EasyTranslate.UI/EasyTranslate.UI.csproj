@@ -40,6 +40,9 @@
   <PropertyGroup>
     <StartupObject>EasyTranslate.UI.Program</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo 128x.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyTranslate, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\TheMulti0.EasyTranslate.1.5.1\lib\netstandard2.0\EasyTranslate.dll</HintPath>
@@ -120,6 +123,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Resources\Logo 128x.psd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -128,6 +132,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo 128x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo 128x.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Logo 128x.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Resources\SplashScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterResolveReferences">

@@ -52,7 +52,10 @@ namespace EasyTranslate.UI.Views
 
         private void OnClosing(object sender, EventArgs e)
         {
-            _jsonParser.Cache.LastOrDefault().Language = _vm.Language;
+            if (_jsonParser.Cache.Count >= 1)
+            {
+                _jsonParser.Cache.LastOrDefault().Language = _vm.Language;
+            }
             _jsonParser.SerializeSequences();
         }
 
@@ -65,6 +68,10 @@ namespace EasyTranslate.UI.Views
         private async Task Translate()
         {
             if (_vm == null)
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(_vm.Text))
             {
                 return;
             }
