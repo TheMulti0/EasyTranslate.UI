@@ -38,7 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>EasyTranslate.UI.App</StartupObject>
+    <StartupObject>EasyTranslate.UI.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyTranslate, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Models\JsonParser.cs" />
     <Compile Include="Models\SavedTranslationSequence.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\PropertyChangedHelper.cs" />
@@ -129,4 +130,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="AfterResolveReferences">
+    <ItemGroup>
+      <EmbeddedResource Include="@(ReferenceCopyLocalPaths)" Condition="'%(ReferenceCopyLocalPaths.Extension)' == '.dll'">
+        <LogicalName>%(ReferenceCopyLocalPaths.DestinationSubDirectory)%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)</LogicalName>
+      </EmbeddedResource>
+    </ItemGroup>
+  </Target>
 </Project>
