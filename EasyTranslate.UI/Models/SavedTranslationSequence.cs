@@ -11,6 +11,6 @@ namespace EasyTranslate.UI.Models
 
         public TranslateLanguages Language { get; set; }
 
-        public DateTime TimeSaved { get; set; }
+        public DateTime LastTimeUsed { get; set; }
     }
 }

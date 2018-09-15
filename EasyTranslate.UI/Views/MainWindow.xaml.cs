@@ -16,7 +16,7 @@ namespace EasyTranslate.UI.Views
     public partial class MainWindow
     {
         private readonly MainWindowViewModel _vm;
-        private readonly JsonParser _json;
+        private readonly JsonParser _jsonParser;
         private CancellationTokenSource _cts;
 
         public MainWindow()
@@ -24,14 +24,14 @@ namespace EasyTranslate.UI.Views
             InitializeComponent();
 
             _vm = DataContext as MainWindowViewModel;
-            _json = new JsonParser();
+            _jsonParser = new JsonParser();
 
-            _json.DeserializeSequencesAsync();
+            _jsonParser.DeserializeSequencesAsync();
         }
 
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            SavedTranslationSequence last = _json.Cache.LastOrDefault();
+            SavedTranslationSequence last = _jsonParser.Cache.LastOrDefault();
 
             _vm.Text = last?.SourceTranslationSequence.Sequence;
 
@@ -41,12 +41,19 @@ namespace EasyTranslate.UI.Views
             _vm.Suggestions = await GetSuggestions(lastTranslationSequence);
 
             _vm.Language = last?.Language ?? TranslateLanguages.Afrikaans;
+
+            await Task.Run(() => _jsonParser.Cache.RemoveAll(saved =>
+            {
+                TimeSpan timeSpan = DateTime.Now - saved.LastTimeUsed;
+                return timeSpan.Days >= 7;
+            }));
+
         }
 
         private void OnClosing(object sender, EventArgs e)
         {
-            _json.Cache.LastOrDefault().Language = _vm.Language;
-            _json.SerializeSequences();
+            _jsonParser.Cache.LastOrDefault().Language = _vm.Language;
+            _jsonParser.SerializeSequences();
         }
 
         private async void OnTextChanged(object sender, TextChangedEventArgs e) 
@@ -91,9 +98,9 @@ namespace EasyTranslate.UI.Views
                 _vm.Result = result.Sequence;
                 _vm.Suggestions = await GetSuggestions(result);
 
-                saved.TimeSaved = DateTime.Now;
+                saved.LastTimeUsed = DateTime.Now;
 
-                _json.Cache.Add(saved);
+                _jsonParser.Cache.Add(saved);
             }
             catch (TranslationFailedException)
             {
@@ -107,13 +114,14 @@ namespace EasyTranslate.UI.Views
             {
                 SavedTranslationSequence savedSequence = null;
 
-                Parallel.ForEach(_json.Cache, (saved, state) =>
+                Parallel.ForEach(_jsonParser.Cache, (saved, state) =>
                 {
                     if (saved.SourceTranslationSequence.Sequence != sequence.Sequence ||
                         saved.Language != _vm.Language)
                     {
                         return;
                     }
+                    saved.LastTimeUsed = DateTime.Now;
                     savedSequence = saved;
                     state.Stop();
                 });
